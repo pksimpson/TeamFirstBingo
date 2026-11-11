@@ -1,1 +1,148 @@
 
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Team First Bingo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:wght@400&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--slate:#1A303A;--navy:#00365B;--sky:#40A2D8;--sky25:#CFE8F6;--sky50:#A0D0EC;--apricot:#FE7A36;--apr25:#FEDECD;--kelly:#4CB963;--gray:#EDEEEF;--gray25:#FBFBFB;--slate50:#8D979D;--ink:var(--slate);--bg:var(--gray);--accent:var(--navy);--line:#C6CBCD;--head:"Montserrat",system-ui,-apple-system,"Segoe UI",sans-serif;--sub:"Gentium Book Plus",Georgia,serif}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--head);background:var(--bg);color:var(--ink)}
+header{padding:18px 16px 8px;text-align:center}
+h1{margin:0;font:600 30px var(--head);color:var(--navy);letter-spacing:0}
+.sub{font:400 17px var(--sub);color:#53636B;margin-top:6px}
+.tabs{display:flex;justify-content:center;gap:8px;margin:12px 0}
+.tabs button,.btn{font:600 14px var(--head);border:1.5px solid var(--navy);background:#fff;color:var(--navy);padding:9px 16px;border-radius:8px;cursor:pointer}
+.tabs button.on,.btn.pri{background:var(--navy);color:#fff}
+main{max-width:640px;margin:0 auto;padding:0 12px 40px}
+
+.join{display:flex;gap:8px;margin:8px 0 14px}
+.join .btn{white-space:nowrap;flex:none}
+.join input{flex:1;min-width:0;font:500 16px var(--head);color:var(--slate);padding:11px;border:1px solid var(--line);border-radius:8px}
+.card{background:#fff;border:2px solid var(--navy);border-radius:12px;overflow:hidden}
+.card .hd{display:grid;grid-template-columns:repeat(5,1fr);background:var(--navy);color:#fff;font:600 26px var(--head);text-align:center;letter-spacing:.08em}
+.card .hd div{padding:6px 0}
+.grid{display:grid;grid-template-columns:repeat(5,1fr)}
+.cell{aspect-ratio:1/1;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;text-align:center;padding:3px;font:600 clamp(9.5px,2.6vw,14px)/1.18 var(--head);color:var(--slate);cursor:pointer;user-select:none;word-break:normal;overflow-wrap:normal;hyphens:none;-webkit-hyphens:none;overflow:hidden}
+.cell span{display:block;width:100%}
+.cell.free{background:var(--apr25);color:var(--navy);font-weight:700;cursor:default;letter-spacing:.06em}
+.cell.on{background:var(--sky50);color:var(--navy)}
+.cell.free.on{background:var(--apr25);color:var(--navy)}
+.cell.win{background:var(--kelly);color:var(--slate)}
+.meta{display:flex;justify-content:space-between;align-items:center;font:500 13px var(--head);color:#53636B;margin:8px 2px}
+.banner{display:none;text-align:center;background:var(--kelly);color:var(--slate);font:700 28px var(--head);letter-spacing:.08em;padding:12px;border-radius:10px;margin:10px 0}
+.banner.on{display:block}
+.caller{text-align:center}
+.big{font:700 34px Georgia,serif;min-height:80px;display:flex;align-items:center;justify-content:center;background:#fff;border:2px solid var(--ink);border-radius:10px;margin:12px 0;padding:10px}
+.hist{font:14px system-ui,sans-serif;text-align:left;background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px;max-height:300px;overflow:auto}
+.hist span{display:inline-block;background:#eef3fa;border-radius:6px;padding:3px 8px;margin:3px}
+.excuse{text-align:center;font:400 15px var(--sub);color:#53636B;margin:22px 0 0;padding-top:14px;border-top:1px solid var(--line)}
+.note{font:400 15px var(--sub);color:#53636B;margin-top:10px}
+/* print sheet */
+.sheet{display:none}
+body.print .sheet{display:grid}
+body.print header,body.print main{display:none}
+body.print{background:#fff}
+@page{size:letter;margin:.35in}
+.sheet{grid-template-columns:1fr 1fr;gap:.25in;}
+.pc{break-inside:avoid;page-break-inside:avoid;height:4.55in;border:1.5px solid var(--navy);border-radius:6px;overflow:hidden;display:flex;flex-direction:column}
+.pc .t{display:flex;justify-content:space-between;padding:3px 8px;font:600 10pt var(--head);background:var(--navy);color:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.pc .hd{display:grid;grid-template-columns:repeat(5,1fr);font:600 17pt var(--head);letter-spacing:.08em;text-align:center;color:var(--navy);background:var(--sky25);border-bottom:1.5px solid var(--navy);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.pc .g{flex:1;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr)}
+.pc .c{border:.5px solid #8D979D;color:var(--slate);display:flex;align-items:center;justify-content:center;text-align:center;padding:2px;font:600 7.2pt/1.15 var(--head);word-break:normal;overflow-wrap:anywhere}
+.pc .c.free{font-weight:700;color:var(--navy);background:var(--apr25);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+</style></head>
+<body>
+<header>
+<h1>Team First Bingo</h1>
+<div class="sub">Find the people on your card. Mark each name when you meet them.</div>
+</header>
+<main>
+
+<section id="play">
+ <div class="join">
+  <input id="who" placeholder="Type your name or a card number (1 to 250)" autocomplete="off">
+  <button class="btn pri" id="go">Get my card</button>
+ </div>
+ <div id="cardwrap"></div>
+ <div class="banner" id="banner">BINGO!</div>
+ <div class="meta"><span id="cid"></span><span><button class="btn" id="reset">Clear marks</button></span></div>
+ <div class="note">Your card is made from what you type, so typing the same name again always brings back the same card. Your marks are saved on this device.</div>
+</section>
+
+<p class="excuse">Please excuse any typos or mistakes on these cards.</p>
+</main>
+<div class="sheet" id="sheet"></div>
+
+<script>
+const NAMES = ["Adam Dunlap", "Adam Mason", "Aimee Golladay", "Alaina Lee", "Amanda Brown", "Andi Farrell", "Ben Pritchett", "Bethany Howard", "Bill Emeott", "Blake Roberts", "Brandon Ayers", "Brennen Simpson", "Brittany Reeves", "Carlos Witt", "Caroline Simpson", "Chad Hamm", "Chris Colee", "Clark Reynolds", "Daniel Suarez", "David Stokey", "Diane Prestridge", "Don Munton", "Dylan Pierson", "Emily Nguyen", "Enrique Puig", "Fraisy George", "Giancarlo Callejas", "Grace Stewart", "Gregg Matte", "Haley Henry", "Hannah Rodriguez", "Harrison Sellers", "Howard Solis", "Ivan Adams", "Jacob Baggett", "Jason Payton", "Jason Ritch", "Jason Swiggart", "Jeff Bumgardner", "Jenny Muñoz", "Jill Reed", "John Gunn", "Jonathan Olmos", "Jordan Cason", "Josh Durham", "Josh Ganjavi", "Justin Seale", "Kadin Chrastina", "Karen Garcia", "Kathleen Fields", "Kevin Phillips", "Kevin Spivey", "Kim Shelby", "LaNeah Brooks", "Laura Trotta", "Leon Brooks", "Leslie Gonzalez", "Luke Reed", "Malcolm Marshall", "Marcus Rodriguez", "Maria Estrella", "Mark Cox", "Matthew Savage", "Mayra Lucio", "Megan Kersten", "Megan Lee", "Melody Conner", "Michelle Ferrell", "Mon'sher Spencer", "Natalia Rocha", "Natalie Dindorf", "Nguyen Nguyen", "Nikki Flores", "Paige Swiggart", "Patricia Herrera", "Patrick Simpson", "Peter Lee", "Renee Johnson", "Rich Douglas", "Roger Cullins", "Ron P'Pool", "Rosemary P'Pool", "Ryan Glasscock", "Samantha Trate", "Sarah Bade", "Sarah Salazar", "Shea Saubert", "Sheylla Pena", "Stacey Graham", "Stephen Tramell", "Suzanne Rose", "Tara VanDover", "Tim Young", "Todd Rapp", "Tommy Kersten", "Toni Steere", "Tony Bianco", "Tyler Scott"];
+// seeded RNG
+function hash(str){let h=1779033703^str.length;for(let i=0;i<str.length;i++){h=Math.imul(h^str.charCodeAt(i),3432918353);h=h<<13|h>>>19}
+ return function(){h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);return(h^=h>>>16)>>>0}}
+function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function rngFor(id){return mulberry(hash("staffbingo-v1:"+id)())}
+function makeCard(id){
+  const r=rngFor(id), a=NAMES.slice();
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}
+  const pick=a.slice(0,24); pick.splice(12,0,"FREE"); return pick;
+}
+const norm=s=>s.trim().replace(/\s+/g," ").toLowerCase();
+const $=id=>document.getElementById(id);
+const LINES=[];
+for(let i=0;i<5;i++){LINES.push([0,1,2,3,4].map(c=>i*5+c));LINES.push([0,1,2,3,4].map(r=>r*5+i))}
+LINES.push([0,6,12,18,24]);LINES.push([4,8,12,16,20]);
+
+function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+let cur=null, marks=new Set([12]);
+function render(){
+  const card=makeCard(cur);
+  let h='<div class="card"><div class="hd">'+[..."BINGO"].map(c=>"<div>"+c+"</div>").join("")+'</div><div class="grid">';
+  card.forEach((n,i)=>{h+='<div class="cell'+(n==="FREE"?" free":"")+(marks.has(i)?" on":"")+'" data-i="'+i+'"><span>'+n.replace(/&/g,"&amp;")+'</span></div>'});
+  $("cardwrap").innerHTML=h+'</div></div>';
+  $("cid").textContent="Card ID: "+cur;
+  fit(); check();
+}
+function fit(){
+  const base=Math.max(10,Math.min(15,window.innerWidth*0.032));
+  document.querySelectorAll(".cell span").forEach(s=>{
+    let f=base; s.style.fontSize=f+"px";
+    while(f>6.5 && s.scrollWidth>s.clientWidth+0.5){f-=0.5;s.style.fontSize=f+"px"}
+  });
+}
+window.addEventListener("resize",fit);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
+function check(){
+  document.querySelectorAll(".cell").forEach(c=>c.classList.remove("win"));
+  let won=false;
+  for(const L of LINES){ if(L.every(i=>marks.has(i))){won=true;L.forEach(i=>document.querySelector('.cell[data-i="'+i+'"]').classList.add("win"))}}
+  $("banner").classList.toggle("on",won);
+}
+function load(id){
+  cur=id; let m=[]; try{m=JSON.parse(store("marks:"+id)||"[]")}catch(e){}
+  marks=new Set([12,...m]); render(); store("last",id);
+}
+$("cardwrap").addEventListener("click",e=>{
+  const c=e.target.closest(".cell"); if(!c||c.classList.contains("free"))return;
+  const i=+c.dataset.i; marks.has(i)?marks.delete(i):marks.add(i);
+  c.classList.toggle("on"); store("marks:"+cur,JSON.stringify([...marks])); check();
+});
+$("go").onclick=()=>{const v=$("who").value; if(norm(v))load(norm(v))};
+$("who").addEventListener("keydown",e=>{if(e.key==="Enter")$("go").click()});
+$("reset").onclick=()=>{marks=new Set([12]);store("marks:"+cur,"[]");render()};
+
+
+// print sheet: ?print=250
+const q=new URLSearchParams(location.search).get("print");
+if(q){
+  document.body.classList.add("print");
+  const N=+q; let h="";
+  for(let n=1;n<=N;n++){
+    const c=makeCard(String(n));
+    h+='<div class="pc"><div class="t"><span>Team First Bingo</span><span>Card #'+n+'</span></div><div class="hd">'+[..."BINGO"].map(x=>"<div>"+x+"</div>").join("")+'</div><div class="g">'+c.map(x=>'<div class="c'+(x==="FREE"?" free":"")+'">'+x+'</div>').join("")+'</div></div>';
+  }
+  $("sheet").innerHTML=h;
+}
+const last=store("last"); if(last)load(last);
+</script>
+</body></html>
